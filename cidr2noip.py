@@ -1,5 +1,7 @@
 import ipaddress
 from itertools import islice
+char1 = set('-')
+char2 = set(' ')
 
 def validate_ip(s):
     a = s.split('.')
@@ -17,10 +19,24 @@ with open("IPs_Scanned_Nov_21 - x.txt", "r") as myfile1:
     for target in myfile1:
         counter=0
         target = target.strip()
-        if(validate_ip(target)):
+        
+        if any((c in char1) for c in target):
+            if any((c in char2) for c in target):
+                ipranges = target.split(" - ")
+                #print(ipranges[0])
+                for numbcount in range(int(ipaddress.IPv4Address(ipranges[0])), int(ipaddress.IPv4Address(ipranges[1]))+1):
+                    counter+=1
+            else:
+                ipranges = target.split("-")
+                ippartfull = ipranges[0].split(".")
+                ippart1 = int(ippartfull[3])
+                ippart2 = int(ipranges[1])
+                if(ippart1<=ippart2):
+                    counter = ippart2-ippart1+1
+                
+        elif(validate_ip(target)):
             counter+=1
-        #elif(validate_ip(target)):
-        #    
+        
         else:
             for ipadd in ipaddress.IPv4Network(target, strict=False):
                 if(int(ipaddress.IPv4Address(ipadd)) >= int(ipaddress.ip_interface(target).ip)):
