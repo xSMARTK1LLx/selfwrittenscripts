@@ -15,6 +15,7 @@ def validate_ip(s):
             return False
     return True
 
+file2 = open("test.txt","w")
 with open("IPs_Scanned_Nov_21 - x.txt", "r") as myfile1:
     for target in myfile1:
         counter=0
@@ -40,6 +41,7 @@ with open("IPs_Scanned_Nov_21 - x.txt", "r") as myfile1:
         else:
             for ipadd in ipaddress.IPv4Network(target, strict=False):
                 if(int(ipaddress.IPv4Address(ipadd)) >= int(ipaddress.ip_interface(target).ip)):
-                    #print(str(ipadd))
+                        #print(str(ipadd))
                     counter+=1
-        print("Cidr : ", target, " , No of IPs : ", counter)
+        file2.write("Cidr : "+str(target)+" , No of IPs : "+str(counter)+"\n")
+            #print("Cidr : ", target, " , No of IPs : ", counter)
